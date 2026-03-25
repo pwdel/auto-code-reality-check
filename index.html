@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto-Coding: Reality Check</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080c10; --surface:#0d1520; --surface2:#121d2e; --border:#1e3050;
+  --accent:#00e5ff; --accent2:#ff3d6b; --accent3:#f0b429; --accent4:#39d353;
+  --text:#c8d8e8; --text-dim:#5a7a9a;
+  --mono:'Share Tech Mono',monospace; --sans:'Barlow',sans-serif; --cond:'Barlow Condensed',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden;height:100vh;width:100vw;user-select:none;}
+#deck{width:100vw;height:100vh;position:relative;}
+.slide{position:absolute;inset:0;padding:38px 54px 76px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.35s ease;overflow:hidden;}
+.slide.active{opacity:1;pointer-events:all;}
+.slide::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.slide-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;opacity:0.7;}
+h1{font-family:var(--cond);font-size:clamp(32px,4.2vw,58px);font-weight:900;line-height:1;letter-spacing:-1px;color:#fff;text-transform:uppercase;}
+h1 span{color:var(--accent);}
+h1 .red{color:var(--accent2);}
+.subtitle{font-size:13px;color:var(--text-dim);font-weight:300;margin-top:6px;max-width:700px;line-height:1.55;}
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:100;background:rgba(13,21,32,0.92);border:1px solid var(--border);border-radius:40px;padding:7px 18px;backdrop-filter:blur(12px);}
+.nav-btn{background:none;border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:10px;padding:4px 14px;border-radius:20px;cursor:pointer;transition:all 0.2s;letter-spacing:1px;}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+.nav-btn:disabled{opacity:0.2;cursor:default;}
+#slide-counter{font-family:var(--mono);font-size:10px;color:var(--text-dim);min-width:40px;text-align:center;}
+.dot-nav{display:flex;gap:5px;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
+.dot.active{background:var(--accent);width:16px;border-radius:3px;}
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s ease;z-index:200;}
+.scan-line{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:scan 10s linear infinite;opacity:0.1;pointer-events:none;z-index:50;}
+@keyframes scan{0%{top:0}100%{top:100vh}}
+.corner-decor{position:absolute;top:18px;right:54px;font-family:var(--mono);font-size:9px;color:var(--text-dim);opacity:0.35;letter-spacing:1px;}
+.callout{background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.18);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--text);line-height:1.5;margin-top:8px;}
+.callout strong{color:var(--accent);}
+.callout.warn{background:rgba(255,61,107,0.05);border-color:rgba(255,61,107,0.2);}
+.callout.warn strong{color:var(--accent2);}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.stat-card.red::after{background:linear-gradient(90deg,var(--accent2),transparent);}
+.stat-card.yellow::after{background:linear-gradient(90deg,var(--accent3),transparent);}
+.stat-num{font-family:var(--cond);font-size:44px;font-weight:900;color:var(--accent);line-height:1;}
+.stat-card.red .stat-num{color:var(--accent2);}
+.stat-label{font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.4;}
+@keyframes fillGrow{from{width:0 !important}to{}}
+@keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* ══ S0: TITLE ══ */
+#s0{justify-content:center;}
+.title-kicker{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;opacity:0.8;}
+.title-main{font-family:var(--cond);font-size:clamp(46px,6.5vw,86px);font-weight:900;text-transform:uppercase;line-height:0.92;color:#fff;letter-spacing:-2px;}
+.title-main .line2{color:var(--accent2);}
+.title-sub{margin-top:18px;font-size:14px;color:var(--text-dim);font-weight:300;max-width:520px;line-height:1.65;border-left:2px solid var(--border);padding-left:14px;}
+.slide-list{margin-top:26px;display:flex;flex-direction:column;gap:5px;}
+.slide-list-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-dim);cursor:pointer;transition:all 0.2s;padding:6px 10px;border-radius:4px;border:1px solid transparent;}
+.slide-list-item:hover{color:var(--text);border-color:var(--border);background:var(--surface);}
+.slide-num{font-family:var(--mono);font-size:9px;color:var(--accent);width:20px;}
+
+/* ══ S1: BUSINESS PROBLEM ══ */
+#s1 .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;flex:1;min-height:0;}
+.bomb-wrap{display:flex;flex-direction:column;gap:10px;}
+.bomb-card{background:var(--surface);border:1px solid rgba(255,61,107,0.35);border-radius:8px;padding:16px 18px;position:relative;overflow:hidden;}
+.bomb-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),transparent);}
+.bomb-top{display:flex;align-items:flex-start;gap:14px;}
+.bomb-emoji{font-size:56px;line-height:1;animation:bombPulse 2s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(255,61,107,0.6));}
+@keyframes bombPulse{0%,100%{transform:scale(1) rotate(-3deg);filter:drop-shadow(0 0 8px rgba(255,61,107,0.4))}50%{transform:scale(1.1) rotate(3deg);filter:drop-shadow(0 0 22px rgba(255,61,107,0.9))}}
+.bomb-stat{font-family:var(--cond);font-size:40px;font-weight:900;color:var(--accent2);}
+.bomb-sublabel{font-size:11px;color:var(--text-dim);margin-top:2px;line-height:1.35;}
+.fuse-label{font-family:var(--mono);font-size:9px;color:var(--accent2);letter-spacing:2px;margin-top:10px;margin-bottom:5px;}
+.fuse-track{height:10px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden;}
+.fuse-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent3),var(--accent2));animation:fuseGrow 2.5s ease forwards;}
+@keyframes fuseGrow{from{width:0}}
+.fuse-pct{font-family:var(--mono);font-size:10px;color:var(--accent2);margin-top:4px;}
+.timeline-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+.tl-title{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px;}
+.right-col{display:flex;flex-direction:column;gap:10px;}
+
+/* ══ S2: PROBLEMS ══ */
+#s2 .problems-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px;flex:1;overflow-y:auto;}
+.prob-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px;cursor:pointer;transition:all 0.2s;position:relative;}
+.prob-card:hover{border-color:rgba(255,61,107,0.5);background:var(--surface2);}
+.prob-card::before{content:attr(data-icon);position:absolute;right:8px;top:8px;font-size:15px;opacity:0.45;}
+.prob-area{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--accent2);text-transform:uppercase;margin-bottom:3px;}
+.prob-title{font-size:11px;font-weight:600;color:#fff;line-height:1.3;}
+.prob-detail{display:none;font-size:12px;color:#b8d0e8;margin-top:8px;line-height:1.55;border-top:1px solid rgba(0,229,255,0.15);padding-top:8px;}
+.prob-card.expanded .prob-detail{display:block;}
+.prob-card.expanded{border-color:var(--accent2);background:var(--surface2);}
+.severity{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle;}
+.sev-high{background:var(--accent2);box-shadow:0 0 5px var(--accent2);}
+.sev-med{background:var(--accent3);box-shadow:0 0 5px var(--accent3);}
+.sev-low{background:var(--accent4);box-shadow:0 0 5px var(--accent4);}
+
+/* ══ S3: HARD ══ */
+#s3 .hook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;flex:1;overflow:hidden;}
+.hook-card{background:var(--surface);border:1px solid rgba(255,61,107,0.2);border-left:3px solid var(--accent2);border-radius:6px;padding:12px 14px;}
+.hook-header{display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap;}
+.hook-badge{font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 7px;border-radius:3px;background:rgba(255,61,107,0.12);color:var(--accent2);border:1px solid rgba(255,61,107,0.25);text-transform:uppercase;flex-shrink:0;}
+.hook-title{font-family:var(--cond);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;flex:1;}
+.hook-trigger{font-family:var(--mono);font-size:8px;color:var(--text-dim);}
+.hook-code{background:#050a0f;border:1px solid var(--border);border-radius:4px;padding:7px 9px;font-family:var(--mono);font-size:9px;color:#7ec8e3;line-height:1.65;margin-top:6px;overflow:hidden;}
+.hook-code .c{color:#3a5a6a;}
+.hook-desc{font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.4;}
+.hard-intro{background:rgba(255,61,107,0.05);border:1px solid rgba(255,61,107,0.18);border-radius:6px;padding:9px 13px;font-size:12px;color:var(--text);margin-bottom:4px;line-height:1.5;}
+.hard-intro strong{color:var(--accent2);}
+
+/* ══ S4: SOFT ══ */
+#s4 .soft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;flex:1;overflow:hidden;}
+.soft-card{background:var(--surface);border:1px solid rgba(0,229,255,0.12);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;transition:all 0.2s;}
+.soft-card:hover{background:var(--surface2);border-left-color:var(--accent4);}
+.soft-header{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.soft-icon{width:24px;height:24px;border-radius:5px;background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.13);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.soft-title{font-family:var(--cond);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;}
+.soft-items{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.soft-items li{font-size:11px;color:#8aaccc;padding-left:12px;position:relative;line-height:1.4;}
+.soft-items li::before{content:'›';position:absolute;left:0;color:var(--accent4);}
+
+/* ══ S5: QUIZ ══ */
+#s5 .quiz-outer{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.quiz-wrap{width:100%;max-width:760px;display:flex;flex-direction:column;gap:14px;}
+.quiz-q{font-family:var(--cond);font-size:clamp(17px,2.3vw,26px);font-weight:700;color:#fff;line-height:1.3;text-transform:uppercase;}
+.quiz-sub{font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:1px;margin-bottom:2px;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.quiz-opt{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px 14px;cursor:pointer;transition:all 0.2s;font-size:12px;color:var(--text);line-height:1.4;text-align:left;font-family:var(--sans);}
+.quiz-opt:hover:not(.disabled){border-color:var(--accent);color:#fff;background:var(--surface2);}
+.quiz-opt.correct{border-color:var(--accent4);background:rgba(57,211,83,0.1);color:var(--accent4);}
+.quiz-opt.wrong{border-color:var(--accent2);background:rgba(255,61,107,0.1);color:var(--accent2);}
+.quiz-opt.revealed{border-color:rgba(57,211,83,0.4);background:rgba(57,211,83,0.05);color:rgba(57,211,83,0.6);}
+.quiz-opt.disabled{cursor:default;}
+.quiz-feedback{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:11px 14px;font-size:12px;color:var(--text);line-height:1.55;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback strong{color:var(--accent);}
+.quiz-bottom{display:flex;align-items:center;gap:10px;}
+.quiz-dots{display:flex;gap:5px;}
+.quiz-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all 0.3s;}
+.quiz-dot.done-correct{background:var(--accent4);}
+.quiz-dot.done-wrong{background:var(--accent2);}
+.quiz-dot.current{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.quiz-score{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-left:auto;}
+.quiz-nav-btn{background:none;border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:10px;padding:5px 14px;border-radius:4px;cursor:pointer;transition:all 0.2s;}
+.quiz-nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.quiz-nav-btn:disabled{opacity:0.25;cursor:default;}
+
+/* ══ S6: BEST PRACTICES ══ */
+#s6 .bp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px;flex:1;overflow:hidden;}
+.bp-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 13px;cursor:pointer;transition:all 0.2s;}
+.bp-card:hover{border-color:var(--accent);background:var(--surface2);}
+.bp-tag{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--accent3);text-transform:uppercase;margin-bottom:4px;}
+.bp-title{font-size:12px;font-weight:600;color:#fff;line-height:1.3;margin-bottom:5px;}
+.bp-body{font-size:11px;color:#8aaccc;line-height:1.5;}
+.bp-tip{font-family:var(--mono);font-size:9px;color:var(--accent);margin-top:7px;border-top:1px solid var(--border);padding-top:6px;line-height:1.4;}
+
+/* ══ S7: VERDICT ══ */
+#s7 .verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;flex:1;}
+.verdict-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:8px;}
+.verdict-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.bad{color:var(--accent2);} .good{color:var(--accent4);}
+.checklist-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;}
+.check-icon{flex-shrink:0;font-size:13px;margin-top:1px;}
+.roi-meter{margin-top:8px;}
+.roi-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;}
+.roi-track{height:7px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;margin-bottom:9px;}
+.roi-fill{height:100%;border-radius:4px;animation:fillGrow 1.5s ease forwards;}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+<div id="progress-bar"></div>
+<div id="deck">
+
+<!-- S0: TITLE -->
+<div class="slide active" id="s0">
+  <div class="corner-decor">AUTO-CODING ANALYSIS // v2.0</div>
+  <div class="title-kicker">Engineering Leadership Briefing</div>
+  <div class="title-main">Auto-Coding<br><span class="line2">Reality Check</span></div>
+  <p class="title-sub">LLM-assisted dev promises 10× delivery. But faster code isn't faster software — and the hidden costs compound fast.</p>
+  <div class="slide-list">
+    <div class="slide-list-item" onclick="goTo(1)"><span class="slide-num">01</span>The Business Problem — does the paradigm even work?</div>
+    <div class="slide-list-item" onclick="goTo(2)"><span class="slide-num">02</span>12 Observed Problems in Production LLM Systems</div>
+    <div class="slide-list-item" onclick="goTo(3)"><span class="slide-num">03</span>Hard Interventions — Hooks &amp; Deterministic Gates</div>
+    <div class="slide-list-item" onclick="goTo(4)"><span class="slide-num">04</span>Soft Interventions — Prompts, Context &amp; Workflow</div>
+    <div class="slide-list-item" onclick="goTo(5)"><span class="slide-num">05</span>Quick-Fire Quiz: Know Your Pitfalls?</div>
+    <div class="slide-list-item" onclick="goTo(6)"><span class="slide-num">06</span>Claude Code Best Practices</div>
+    <div class="slide-list-item" onclick="goTo(7)"><span class="slide-num">07</span>ROI Verdict &amp; Recommendations</div>
+  </div>
+</div>
+
+<!-- S1: BUSINESS PROBLEM -->
+<div class="slide" id="s1">
+  <div class="corner-decor">SLIDE 01 / BUSINESS PROBLEM</div>
+  <div class="slide-label">01 — The Business Problem</div>
+  <h1>Who Gives A Shit If<br><span>You Code Faster?</span></h1>
+  <p class="subtitle">Speed of code generation ≠ speed of software delivery. The real cost is what comes after the first sprint.</p>
+  <div class="content-grid">
+    <div class="bomb-wrap">
+      <div class="bomb-card">
+        <div class="bomb-top">
+          <div class="bomb-emoji">💣</div>
+          <div style="flex:1">
+            <div class="bomb-stat" id="debt-counter">0%</div>
+            <div class="bomb-sublabel">of LLM-generated brownfield code needs significant rework within 3 months</div>
+          </div>
+        </div>
+        <div class="fuse-label">⚡ TECH DEBT FUSE — BURNING</div>
+        <div class="fuse-track"><div class="fuse-fill" style="width:68%"></div></div>
+        <div class="fuse-pct">💥 Detonation probability at 6mo: <strong>HIGH</strong></div>
+        <div class="callout warn" style="margin-top:10px">
+          <strong>Ticking Time Bomb:</strong> Greenfield LLM code feels magical on day one. That same code becomes an unmaintainable trap when requirements change. LLMs cannot reliably understand their own prior output in context.
+        </div>
+      </div>
+      <div class="timeline-card">
+        <div class="tl-title">CUMULATIVE REWORK COST — LLM (NO GUARDRAILS) VS. HUMAN DEV</div>
+        <canvas id="debtChart" height="88"></canvas>
+      </div>
+    </div>
+    <div class="right-col">
+      <div class="stat-card red"><div class="stat-num">3×</div><div class="stat-label">more brownfield context failures vs. greenfield in the same LLM session</div></div>
+      <div class="stat-card yellow"><div class="stat-num">42%</div><div class="stat-label">average velocity loss from accumulated LLM tech debt at 6 months</div></div>
+      <div class="stat-card"><div class="stat-num">~70%</div><div class="stat-label">of sessions degrade in correctness when context window passes 60% full</div></div>
+      <div class="callout"><strong>Key insight:</strong> The LLM isn't the problem — treating it like a self-sufficient dev is. Build the review pipeline first, then the feature.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S2: PROBLEMS -->
+<div class="slide" id="s2">
+  <div class="corner-decor">SLIDE 02 / OBSERVED PROBLEMS</div>
+  <div class="slide-label">02 — Observed Problems in LLM Coding Systems</div>
+  <h1>12 Ways It <span class="red">Goes Wrong</span></h1>
+  <p class="subtitle">Observed in Claude Code / OpenCode production workflows. <strong style="color:var(--accent)">Click any card</strong> to reveal full details.</p>
+  <div class="problems-grid" id="prob-grid"></div>
+</div>
+
+<!-- S3: HARD INTERVENTIONS -->
+<div class="slide" id="s3">
+  <div class="corner-decor">SLIDE 03 / HARD INTERVENTIONS</div>
+  <div class="slide-label">03 — Hard Interventions</div>
+  <h1>Hooks: <span>Deterministic</span> Guardrails</h1>
+  <div class="hard-intro"><strong>Hard interventions</strong> are hooks and automated gates — they execute deterministically and cannot be argued away by a clever prompt. Unlike CLAUDE.md rules (advisory), hooks fire on every action, every time, with zero exceptions.</div>
+  <div class="hook-grid" id="hook-grid"></div>
+</div>
+
+<!-- S4: SOFT INTERVENTIONS -->
+<div class="slide" id="s4">
+  <div class="corner-decor">SLIDE 04 / SOFT INTERVENTIONS</div>
+  <div class="slide-label">04 — Soft Interventions</div>
+  <h1>Prompts, Context<br><span>&amp; Workflow</span></h1>
+  <p class="subtitle">Soft interventions shape LLM behavior through prompting, task framing, and session management. Powerful — but advisory, not guaranteed. Pair with hard interventions for the high-risk areas.</p>
+  <div class="soft-grid" id="soft-grid"></div>
+</div>
+
+<!-- S5: QUIZ -->
+<div class="slide" id="s5">
+  <div class="corner-decor">SLIDE 05 / QUIZ</div>
+  <div class="slide-label">05 — Quick-Fire Quiz</div>
+  <h1>Know Your <span>Pitfalls?</span></h1>
+  <div class="quiz-outer">
+    <div class="quiz-wrap">
+      <div>
+        <div class="quiz-sub" id="quiz-sub">QUESTION 1 OF 6</div>
+        <div class="quiz-q" id="quiz-q"></div>
+      </div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+      <div class="quiz-bottom">
+        <div class="quiz-dots" id="quiz-dots"></div>
+        <div class="quiz-score" id="quiz-score">0 / 0</div>
+        <button class="quiz-nav-btn" id="quiz-next-btn" onclick="nextQuiz()" disabled>NEXT →</button>
+        <button class="quiz-nav-btn" id="quiz-restart-btn" onclick="restartQuiz()" style="display:none">↺ RESTART</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S6: BEST PRACTICES -->
+<div class="slide" id="s6">
+  <div class="corner-decor">SLIDE 06 / BEST PRACTICES</div>
+  <div class="slide-label">06 — Claude Code Best Practices</div>
+  <h1>Work <span>Smarter</span><br>Not Just Faster</h1>
+  <p class="subtitle">From Anthropic's own documentation — patterns that separate teams that ship from teams that drown in rework.</p>
+  <div class="bp-grid" id="bp-grid"></div>
+</div>
+
+<!-- S7: VERDICT -->
+<div class="slide" id="s7">
+  <div class="corner-decor">SLIDE 07 / VERDICT</div>
+  <div class="slide-label">07 — ROI Verdict</div>
+  <h1>The <span>Honest</span> Verdict</h1>
+  <p class="subtitle">Auto-coding is a force multiplier — but only with deliberate guardrails. The honest scorecard.</p>
+  <div class="verdict-grid">
+    <div class="verdict-panel">
+      <div class="verdict-title bad">❌ Without Guardrails</div>
+      <div class="checklist-item"><span class="check-icon">🔴</span>Context drift silently corrupts logic in long sessions</div>
+      <div class="checklist-item"><span class="check-icon">🔴</span>Scope creep multiplies integration bugs undetected</div>
+      <div class="checklist-item"><span class="check-icon">🔴</span>Brownfield tasks fail at 3× greenfield rate</div>
+      <div class="checklist-item"><span class="check-icon">🔴</span>Supervision overhead wipes productivity gains</div>
+      <div class="checklist-item"><span class="check-icon">🔴</span>Security surface expands without audit trail</div>
+      <div class="roi-meter">
+        <div class="roi-label"><span>ROI vs. Cost</span><span style="color:var(--accent2)">NEGATIVE at 6mo</span></div>
+        <div class="roi-track"><div class="roi-fill" style="width:19%;background:var(--accent2)"></div></div>
+        <div class="roi-label"><span>Delivery Confidence</span><span style="color:var(--accent2)">LOW</span></div>
+        <div class="roi-track"><div class="roi-fill" style="width:15%;background:var(--accent2)"></div></div>
+      </div>
+    </div>
+    <div class="verdict-panel">
+      <div class="verdict-title good">✅ With Hard + Soft Guardrails</div>
+      <div class="checklist-item"><span class="check-icon">🟢</span>Context pinning keeps constraints consistent across turns</div>
+      <div class="checklist-item"><span class="check-icon">🟢</span>Diff-scope hooks make scope creep physically impossible</div>
+      <div class="checklist-item"><span class="check-icon">🟢</span>Test-first decomposition catches logic errors early</div>
+      <div class="checklist-item"><span class="check-icon">🟢</span>Architecture rubric maintains pattern cohesion</div>
+      <div class="checklist-item"><span class="check-icon">🟢</span>40–60% net velocity gain on greenfield tasks</div>
+      <div class="roi-meter">
+        <div class="roi-label"><span>ROI vs. Cost</span><span style="color:var(--accent4)">+40–60% greenfield</span></div>
+        <div class="roi-track"><div class="roi-fill" style="width:74%;background:var(--accent4)"></div></div>
+        <div class="roi-label"><span>Delivery Confidence</span><span style="color:var(--accent4)">HIGH w/ oversight</span></div>
+        <div class="roi-track"><div class="roi-fill" style="width:80%;background:var(--accent4)"></div></div>
+      </div>
+      <div class="callout" style="margin-top:4px"><strong>Bottom line:</strong> Fast junior dev who writes a lot. Build the review pipeline before you build the feature.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="prev()">← PREV</button>
+  <div class="dot-nav" id="dot-nav"></div>
+  <span id="slide-counter">1 / 8</span>
+  <button class="nav-btn" id="btn-next" onclick="next()">NEXT →</button>
+</div>
+
+<script>
+const TOTAL = 8;
+let current = 0;
+
+const problems = [
+  {area:"Context",      title:"Context Drift",             detail:"Forgets prior constraints in long sessions; repeats bad fixes. LLM performance degrades measurably as the context window passes ~60% full.", icon:"🌀", sev:"high"},
+  {area:"Correctness",  title:"Broken Logic, Looks Fine",   detail:"Correct-looking code with broken state handling and edge cases. The model optimises for surface plausibility, not runtime correctness.", icon:"🐛", sev:"high"},
+  {area:"Architecture", title:"Weak Arch Alignment",        detail:"Noisy, unidiomatic patterns accumulate silently. Without an explicit rubric enforced at review time, every session can introduce a new anti-pattern.", icon:"🏗️", sev:"high"},
+  {area:"Scope",        title:"Scope Creep",                detail:"Unrelated refactors, files, and dependency changes sneak in undetected. Each one multiplies integration bugs and blows up diffs.", icon:"📈", sev:"high"},
+  {area:"Task Defn",    title:"Ambiguous Instructions",     detail:"Without explicit goal, non-goals, and acceptance criteria, the LLM invents its own definition of done — and it's usually wrong.", icon:"📋", sev:"med"},
+  {area:"Tooling",      title:"Tool Misuse & Dead-Ends",    detail:"Wrong tool selection and repeated failures waste cycles. Without a retry policy, Claude can loop indefinitely on the same failing tool call.", icon:"🔧", sev:"med"},
+  {area:"Quality",      title:"Inconsistent Across Runs",   detail:"Same prompt, wildly different output. Model version drift and context state both affect quality unpredictably across sessions.", icon:"🎲", sev:"med"},
+  {area:"ROI",          title:"Supervision Overhead",       detail:"Human review time often exceeds time saved. Without token/time budgets and stop conditions, tasks balloon with no natural termination.", icon:"👁️", sev:"med"},
+  {area:"Security",     title:"Security & Safety Risk",     detail:"Destructive commands, .env reads, and unsafe ops execute without guardrails unless you explicitly deny them in hooks.", icon:"🔐", sev:"high"},
+  {area:"Testing",      title:"Regression Risk",            detail:"Touched areas lack test coverage; regressions propagate silently downstream. 'Done' responses without attached test evidence are meaningless.", icon:"📉", sev:"high"},
+  {area:"Orchestration","title":"Weak Multi-Agent Teams",   detail:"True team orchestration is limited in current tooling. Interim task-based orchestrator/subagent patterns break on complex, interdependent workflows.", icon:"🤖", sev:"low"},
+  {area:"Platform",     title:"Provider Portability Pain",  detail:"Auth, plugin setup, and tool-specific assumptions create silent lock-in. Keep prompts provider-neutral and auth setup scripted from day one.", icon:"🔌", sev:"low"},
+];
+
+const hooks = [
+  {title:"Diff-Scope Gate",       trigger:"PostToolUse: Edit/Write",
+   code:`<span class="c"># Block writes outside approved paths</span>\nif changed_path not in APPROVED_PATHS:\n    sys.exit(1)  <span class="c"># hard stop</span>`,
+   desc:"Physically prevents scope creep. If Claude edits a file outside the approved set, the hook fails the action — no prompt can override this."},
+  {title:"Dependency Gate",       trigger:"PostToolUse: Bash",
+   code:`<span class="c"># Catch unauthorized dep installs</span>\nif 'npm install' in cmd or 'pip install' in cmd:\n    require_explicit_approval()`,
+   desc:"Any new dependency requires a human approval step. Prevents silent library bloat and supply-chain drift before it reaches git."},
+  {title:"Test Evidence Gate",    trigger:"Stop: before 'done'",
+   code:`<span class="c"># Block completion without test output</span>\nif not has_test_evidence(response):\n    inject("Run tests. Attach output.")`,
+   desc:"Claude cannot mark a task complete unless test output is attached. Turns 'done' from a claim into evidence."},
+  {title:"Security Denylist",     trigger:"PreToolUse: Bash",
+   code:`<span class="c"># Block destructive / secret-exposing ops</span>\nDENY = ['rm -rf /','cat .env','curl|bash']\nif any(d in cmd for d in DENY): sys.exit(1)`,
+   desc:"Hard-denies known destructive commands and secret-exposure patterns before they execute. No prompt can un-block these."},
+  {title:"Retry → Diagnose",      trigger:"PostToolUse: repeated fail",
+   code:`<span class="c"># After N failures, force diagnose mode</span>\nif fail_count >= 3:\n    inject("Switch to diagnose. Explain why.")`,
+   desc:"Breaks infinite tool-retry loops. After N consecutive failures, automatically forces Claude into diagnostic mode with an explanation requirement."},
+  {title:"Constraint Injection",  trigger:"PreSampling: every turn",
+   code:`<span class="c"># Pin CONSTRAINTS.md into every turn</span>\nsystem += read_file('CONSTRAINTS.md')\n<span class="c"># Survives context compaction</span>`,
+   desc:"CONSTRAINTS.md is programmatically injected into every sampling call. Unlike CLAUDE.md which can drift, this fires deterministically."},
+];
+
+const softs = [
+  {icon:"📌", title:"Context Pinning",        items:["CONSTRAINTS.md read at session start","Turn-level constraint check in orchestrator prompt","Keep pre-compaction transform active for critical rules"]},
+  {icon:"🧪", title:"Test-First Decomposition", items:["Require test cases before any implementation starts","Use team-review subagent as a mandatory pass","Block 'done' responses unless test output is attached"]},
+  {icon:"🏛️", title:"Architecture Rubric",    items:["Checklist run during every review pass","'No new pattern without written rationale' rule enforced","Architecture impact note required per change / PR"]},
+  {icon:"📝", title:"Standardized Task Intake", items:["Template: goal / non-goals / file scope / acceptance tests","Orchestrator splits large asks into subtasks before coding","Reject execution when acceptance criteria are missing"]},
+  {icon:"🔁", title:"Failure & Retry Policy",  items:["After 2 bad corrections: /clear and rephrase from scratch","Diagnose-mode prompt injected automatically on repeated fail","Failure summaries required before resuming work"]},
+  {icon:"📊", title:"Token & Time Budgets",   items:["Budget per task with explicit stop conditions","Auto-log rework causes to .context/ for weekly prompt tuning","Prefer boilerplate / refactor / docs as first automation wins"]},
+];
+
+const bestPractices = [
+  {tag:"Context Management", title:"Context Window is Your #1 Resource",
+   body:"Performance degrades as context fills. Run /clear between unrelated tasks. Use /compact to summarise partial sessions. Track context usage continuously.",
+   tip:"→ /clear between tasks · /compact <instructions> for partial reset · /btw for ephemeral questions"},
+  {tag:"Verification", title:"Give Claude a Way to Check Itself",
+   body:"Claude performs dramatically better when it can verify its own work — run tests, compare screenshots, validate outputs. Without success criteria, you become the only feedback loop.",
+   tip:"→ 'Run the test suite after implementing. Fix failures before saying done.'"},
+  {tag:"Planning", title:"Explore First, Plan, Then Code",
+   body:"Use Plan Mode (Ctrl+G) to separate exploration from execution. Four phases: Explore → Plan → Implement → Commit. Jumping straight to code solves the wrong problem.",
+   tip:"→ Plan Mode for multi-file changes · Skip for single-line fixes"},
+  {tag:"CLAUDE.md", title:"Keep CLAUDE.md Short & Surgical",
+   body:"Bloated CLAUDE.md causes Claude to ignore your most important rules. Only include things Claude would get wrong without them. Prune ruthlessly — use hooks for non-negotiables.",
+   tip:"→ Run /init to generate a starter · Check into git · Prune regularly"},
+  {tag:"Subagents", title:"Delegate Research to Subagents",
+   body:"Subagents run in separate context windows. Research fills your context fast; subagents explore and report back summaries without polluting your implementation session.",
+   tip:"→ 'Use subagents to investigate X' — keeps main context clean for building"},
+  {tag:"Parallelism", title:"Multiply Output with Parallel Sessions",
+   body:"Writer + Reviewer pattern: one session implements, a fresh session reviews. Fresh context improves review quality — Claude won't be biased toward code it just wrote.",
+   tip:"→ Writer session → Reviewer session → address feedback → ship"},
+];
+
+const quizData = [
+  {q:"Context window hits 80%. What does Claude start doing?",
+   opts:["Automatically clears old context","Performance degrades; may forget earlier constraints","Switches to a faster sub-model","Asks you to summarize the conversation"],
+   correct:1,
+   explanation:"<strong>Context window is your #1 resource.</strong> As it fills, LLM performance degrades — Claude may forget earlier instructions or produce more mistakes. Run /clear between unrelated tasks and use /compact to summarise."},
+  {q:"What is the single highest-leverage thing you can do to improve Claude's output quality?",
+   opts:["Write longer, more detailed prompts","Provide verification criteria (tests, expected outputs)","Use Plan Mode for every task","Clear context more frequently"],
+   correct:1,
+   explanation:"<strong>Give Claude a way to verify its own work.</strong> Tests, screenshots, or expected outputs let it self-correct. Without them, you're the only feedback loop and every mistake needs your attention."},
+  {q:"Claude does something wrong. You correct it. Still wrong. You correct again. What next?",
+   opts:["Correct it a third time with even more detail","Keep going — persistence eventually works","Run /clear and rewrite the prompt using what you learned","Switch to a more powerful model"],
+   correct:2,
+   explanation:"<strong>After two failed corrections, /clear and start fresh.</strong> Context is polluted with failed approaches. A clean session with a better prompt almost always beats a long session with accumulated corrections."},
+  {q:"What's the key difference between a Hook and a CLAUDE.md instruction?",
+   opts:["Hooks are faster; CLAUDE.md is more accurate","Hooks are deterministic and cannot be overridden by prompts; CLAUDE.md is advisory","CLAUDE.md runs before every tool call; hooks run after","There is no practical difference in real workflows"],
+   correct:1,
+   explanation:"<strong>Hooks are hard guardrails; CLAUDE.md is soft.</strong> CLAUDE.md instructions are advisory and can drift as context fills. Hooks fire deterministically on every action — no prompt can override them."},
+  {q:"You need Claude to research an unfamiliar codebase before implementing. Best approach?",
+   opts:["Ask Claude to read every relevant file and summarize","Use a subagent so exploration doesn't fill your main context","Enable Plan Mode and read all files before starting","Open a new session with no prior context"],
+   correct:1,
+   explanation:"<strong>Subagents protect your main context.</strong> Research reads lots of files — all filling your context window. Subagents run in their own context and report back summaries, keeping your implementation session clean."},
+  {q:"Your CLAUDE.md is 400+ lines. Claude keeps ignoring a critical rule. Most likely cause?",
+   opts:["The rule uses incorrect syntax","The file is too long — important rules get lost in the noise","You need to repeat the rule at least three times","The model needs a version upgrade"],
+   correct:1,
+   explanation:"<strong>Bloated CLAUDE.md files cause rules to be ignored.</strong> Keep it short and surgical. For each line ask: 'Would removing this cause a mistake?' If not, cut it. Use hooks for rules that must always fire — never rely on CLAUDE.md for them."},
+];
+
+// Render interactive cards and quiz content from static data.
+function renderProblems(){
+  const g=document.getElementById('prob-grid'); g.innerHTML='';
+  problems.forEach(p=>{
+    const d=document.createElement('div'); d.className='prob-card'; d.setAttribute('data-icon',p.icon);
+    d.innerHTML=`<div class="prob-area"><span class="severity sev-${p.sev}"></span>${p.area}</div><div class="prob-title">${p.title}</div><div class="prob-detail">${p.detail}</div>`;
+    d.onclick=()=>d.classList.toggle('expanded'); g.appendChild(d);
+  });
+}
+
+function renderHooks(){
+  const g=document.getElementById('hook-grid'); g.innerHTML='';
+  hooks.forEach(h=>{
+    const el=document.createElement('div'); el.className='hook-card';
+    el.innerHTML=`<div class="hook-header"><div class="hook-badge">HOOK</div><div class="hook-title">${h.title}</div></div><div class="hook-trigger">${h.trigger}</div><div class="hook-code">${h.code}</div><div class="hook-desc">${h.desc}</div>`;
+    g.appendChild(el);
+  });
+}
+
+function renderSoft(){
+  const g=document.getElementById('soft-grid'); g.innerHTML='';
+  softs.forEach(s=>{
+    const el=document.createElement('div'); el.className='soft-card';
+    el.innerHTML=`<div class="soft-header"><div class="soft-icon">${s.icon}</div><div class="soft-title">${s.title}</div></div><ul class="soft-items">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    g.appendChild(el);
+  });
+}
+
+function renderBP(){
+  const g=document.getElementById('bp-grid'); g.innerHTML='';
+  bestPractices.forEach(b=>{
+    const el=document.createElement('div'); el.className='bp-card';
+    el.innerHTML=`<div class="bp-tag">${b.tag}</div><div class="bp-title">${b.title}</div><div class="bp-body">${b.body}</div><div class="bp-tip">${b.tip}</div>`;
+    g.appendChild(el);
+  });
+}
+
+function drawDebtChart(){
+  const canvas=document.getElementById('debtChart'); if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth||330; canvas.width=W; canvas.height=88;
+  const human=[0,10,15,20,22,24,26], llm=[0,6,9,16,28,44,64];
+  const pad={t:8,r:8,b:18,l:30}, w=W-pad.l-pad.r, h=88-pad.t-pad.b, maxV=70;
+  const px=i=>pad.l+(i/6)*w, py=v=>pad.t+h-(v/maxV)*h;
+
+  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+  for(let v=0;v<=70;v+=14){ctx.beginPath();ctx.moveTo(pad.l,py(v));ctx.lineTo(pad.l+w,py(v));ctx.stroke();}
+
+  ctx.beginPath(); llm.forEach((v,i)=>i===0?ctx.moveTo(px(i),py(v)):ctx.lineTo(px(i),py(v)));
+  ctx.lineTo(px(6),py(0));ctx.lineTo(px(0),py(0));ctx.closePath();
+  ctx.fillStyle='rgba(255,61,107,0.06)';ctx.fill();
+
+  ctx.strokeStyle='#39d353';ctx.lineWidth=2;
+  ctx.beginPath();human.forEach((v,i)=>i===0?ctx.moveTo(px(i),py(v)):ctx.lineTo(px(i),py(v)));ctx.stroke();
+
+  ctx.strokeStyle='#ff3d6b';ctx.lineWidth=2.5;
+  ctx.beginPath();llm.forEach((v,i)=>i===0?ctx.moveTo(px(i),py(v)):ctx.lineTo(px(i),py(v)));ctx.stroke();
+
+  ctx.fillStyle='#5a7a9a';ctx.font='8px Share Tech Mono';ctx.textAlign='center';
+  [0,1,2,3,4,5,6].forEach(i=>ctx.fillText(`M${i}`,px(i),88-3));
+  ctx.fillStyle='#39d353';ctx.fillRect(pad.l,0,8,2);
+  ctx.fillStyle='#5a7a9a';ctx.textAlign='left';ctx.fillText('Human',pad.l+12,7);
+  ctx.fillStyle='#ff3d6b';ctx.fillRect(pad.l+58,0,8,2);
+  ctx.fillStyle='#5a7a9a';ctx.fillText('LLM unguarded',pad.l+70,7);
+}
+
+function animateCounter(){
+  const el=document.getElementById('debt-counter'); if(!el)return; let v=0;
+  const step=()=>{v=Math.min(v+2,68);el.textContent=v+'%';if(v<68)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+
+let qIdx=0,score=0,answered=[];
+
+function buildQuizDots(){
+  const d=document.getElementById('quiz-dots'); d.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const dot=document.createElement('div');dot.className='quiz-dot'+(i===0?' current':'');dot.id=`qdot-${i}`;d.appendChild(dot);
+  });
+}
+
+function renderQuiz(){
+  const q=quizData[qIdx];
+  document.getElementById('quiz-sub').textContent=`QUESTION ${qIdx+1} OF ${quizData.length}`;
+  document.getElementById('quiz-q').textContent=q.q;
+  document.getElementById('quiz-score').textContent=`${score} / ${qIdx}`;
+  const opts=document.getElementById('quiz-options'); opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button'); btn.className='quiz-opt'; btn.textContent=o;
+    btn.onclick=()=>answerQuiz(i); opts.appendChild(btn);
+  });
+  document.getElementById('quiz-feedback').className='quiz-feedback';
+  document.getElementById('quiz-next-btn').disabled=true;
+  document.getElementById('quiz-next-btn').style.display='';
+  document.getElementById('quiz-restart-btn').style.display='none';
+  document.querySelectorAll('.quiz-dot').forEach((d,i)=>{
+    d.className='quiz-dot'+(i===qIdx?' current':(answered[i]==='correct'?' done-correct':answered[i]==='wrong'?' done-wrong':''));
+  });
+}
+
+function answerQuiz(chosen){
+  const q=quizData[qIdx];
+  document.querySelectorAll('.quiz-opt').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.correct) o.classList.add(chosen===i?'correct':'revealed');
+    else if(i===chosen) o.classList.add('wrong');
+  });
+  const ok=chosen===q.correct;
+  if(ok)score++;
+  answered[qIdx]=ok?'correct':'wrong';
+  const fb=document.getElementById('quiz-feedback');
+  fb.innerHTML=`${ok?'✅ Correct!':'❌ Not quite.'} ${q.explanation}`;
+  fb.className='quiz-feedback show';
+  document.getElementById('quiz-score').textContent=`${score} / ${qIdx+1}`;
+  document.querySelectorAll('.quiz-dot').forEach((d,i)=>{
+    d.className='quiz-dot'+(i===qIdx?(ok?'done-correct':'done-wrong'):(answered[i]==='correct'?'done-correct':answered[i]==='wrong'?'done-wrong':''));
+  });
+  const last=qIdx===quizData.length-1;
+  const nb=document.getElementById('quiz-next-btn');
+  nb.disabled=false;
+  if(last){nb.style.display='none';document.getElementById('quiz-restart-btn').style.display='';}
+}
+
+function nextQuiz(){if(qIdx<quizData.length-1){qIdx++;renderQuiz();}}
+function restartQuiz(){qIdx=0;score=0;answered=[];buildQuizDots();renderQuiz();}
+
+function buildDots(){
+  const nav=document.getElementById('dot-nav');nav.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);nav.appendChild(d);}
+}
+
+function updateNav(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('slide-counter').textContent=`${current+1} / ${TOTAL}`;
+  document.getElementById('btn-prev').disabled=current===0;
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('progress-bar').style.width=`${((current+1)/TOTAL)*100}%`;
+}
+
+function goTo(n){
+  document.getElementById('s'+current)?.classList.remove('active');
+  current=Math.max(0,Math.min(TOTAL-1,n));
+  document.getElementById('s'+current)?.classList.add('active');
+  updateNav();
+  if(current===1){animateCounter();setTimeout(drawDebtChart,100);}
+  if(current===5){buildQuizDots();renderQuiz();}
+}
+
+function next(){goTo(current+1);}
+function prev(){goTo(current-1);}
+
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();next();}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();prev();}
+});
+
+renderProblems();renderHooks();renderSoft();renderBP();buildDots();updateNav();
+window.addEventListener('resize',()=>{if(current===1)drawDebtChart();});
+</script>
+</body>
+</html>
