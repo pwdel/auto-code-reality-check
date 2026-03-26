@@ -86,43 +86,106 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
 .formula-note{font-family:var(--mono);font-size:10px;color:#e7f0fa;text-align:center;margin-top:4px;opacity:1;}
 
 /* ══ S2: PROBLEMS ══ */
-#s2 .problems-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px;flex:1;overflow-y:auto;}
-.prob-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px;cursor:pointer;transition:all 0.2s;position:relative;}
-.prob-card:hover{border-color:rgba(255,61,107,0.5);background:var(--surface2);}
-.prob-card::before{content:attr(data-icon);position:absolute;right:8px;top:8px;font-size:15px;opacity:0.45;}
-.prob-area{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--accent2);text-transform:uppercase;margin-bottom:3px;}
-.prob-title{font-size:11px;font-weight:600;color:#fff;line-height:1.3;}
-.prob-detail{display:none;font-size:12px;color:#b8d0e8;margin-top:8px;line-height:1.55;border-top:1px solid rgba(0,229,255,0.15);padding-top:8px;}
-.prob-card.expanded .prob-detail{display:block;}
-.prob-card.expanded{border-color:var(--accent2);background:var(--surface2);}
-.severity{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle;}
-.sev-high{background:var(--accent2);box-shadow:0 0 5px var(--accent2);}
-.sev-med{background:var(--accent3);box-shadow:0 0 5px var(--accent3);}
-.sev-low{background:var(--accent4);box-shadow:0 0 5px var(--accent4);}
+#s2 .s2-layout{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-top:10px;flex:1;min-height:0;}
+#s2 .s2-left{display:flex;flex-direction:column;gap:8px;min-height:0;}
+#s2 .s2-right{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;justify-content:center;min-height:0;}
+.cat-bar{display:flex;flex-wrap:wrap;gap:5px;flex-shrink:0;}
+.cat-btn{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:3px 9px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.15s;text-transform:uppercase;white-space:nowrap;}
+.cat-btn:hover{color:#fff;}
+.cat-btn.active{color:#000;font-weight:700;}
+.prob-grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;overflow-y:auto;flex:1;}
+.prob-card2{border-radius:6px;border:1px solid;padding:9px 10px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.prob-card2::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.prob-card2:hover{filter:brightness(1.15);}
+.prob-card2.active-card{outline:2px solid #fff;outline-offset:-2px;}
+.pc-icon{font-size:15px;margin-bottom:4px;display:block;}
+.pc-title{font-size:11px;font-weight:600;color:#fff;line-height:1.3;}
+.pc-cat{font-family:var(--mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;margin-top:3px;opacity:0.7;}
+.detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:6px;opacity:0.3;}
+.detail-empty-icon{font-family:var(--mono);font-size:28px;color:var(--text-dim);}
+.detail-empty-txt{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text-dim);}
+.detail-cat-tag{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.detail-title{font-family:var(--cond);font-size:22px;font-weight:700;color:#fff;text-transform:uppercase;line-height:1.1;margin-bottom:10px;}
+.detail-body{font-size:12px;color:#b8d0e8;line-height:1.65;flex:1;}
+.detail-divider{height:1px;background:var(--border);margin:12px 0;}
+.detail-area-row{font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
 
-/* ══ S3: HARD ══ */
-#s3 .hook-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;flex:1;overflow:hidden;}
-.hook-card{background:var(--surface);border:1px solid rgba(255,61,107,0.2);border-left:3px solid var(--accent2);border-radius:6px;padding:12px 14px;}
-.hook-header{display:flex;align-items:center;gap:7px;margin-bottom:6px;flex-wrap:wrap;}
-.hook-badge{font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 7px;border-radius:3px;background:rgba(255,61,107,0.12);color:var(--accent2);border:1px solid rgba(255,61,107,0.25);text-transform:uppercase;flex-shrink:0;}
-.hook-title{font-family:var(--cond);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;flex:1;}
-.hook-trigger{font-family:var(--mono);font-size:8px;color:var(--text-dim);}
-.hook-code{background:#050a0f;border:1px solid var(--border);border-radius:4px;padding:7px 9px;font-family:var(--mono);font-size:9px;color:#7ec8e3;line-height:1.65;margin-top:6px;overflow:hidden;}
-.hook-code .c{color:#3a5a6a;}
-.hook-desc{font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.4;}
-.hard-intro{background:rgba(255,61,107,0.05);border:1px solid rgba(255,61,107,0.18);border-radius:6px;padding:9px 13px;font-size:12px;color:var(--text);margin-bottom:4px;line-height:1.5;}
-.hard-intro strong{color:var(--accent2);}
+/* ══ S3: HARD (PIPELINE) ══ */
+#s3 .s3-body{display:flex;flex-direction:column;gap:10px;flex:1;margin-top:10px;min-height:0;}
+.hooks-filter-bar{display:flex;flex-wrap:wrap;gap:5px;flex-shrink:0;}
+.pipeline-wrap{position:relative;flex:1;min-height:0;overflow:hidden;}
+.pipeline-track{position:absolute;top:50%;left:0;right:0;height:6px;background:linear-gradient(90deg,rgba(255,61,107,0.18),rgba(255,61,107,0.85),rgba(255,61,107,0.18));border-radius:999px;box-shadow:0 0 22px rgba(255,61,107,0.2);transform:translateY(-50%);z-index:0;}
+.pipeline-track::after{content:'';position:absolute;right:-2px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:18px solid var(--accent2);filter:drop-shadow(0 0 8px rgba(255,61,107,0.35));}
+.gates-row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;height:100%;}
+.gate-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid rgba(255,61,107,0.3);border-radius:6px;padding:10px 12px;position:relative;transition:border-color 0.2s;}
+.gate-card:hover{border-color:var(--accent2);}
+.gate-sym{display:flex;justify-content:center;margin-bottom:6px;flex-shrink:0;}
+.gate-name{font-family:var(--cond);font-size:15px;font-weight:700;color:#fff;text-transform:uppercase;line-height:1.15;margin-bottom:4px;}
+.gate-trigger{font-family:var(--mono);font-size:8px;color:var(--accent2);letter-spacing:1px;margin-bottom:7px;opacity:0.9;}
+.gate-desc{font-size:11px;color:#d4e0ed;line-height:1.48;flex:1;}
+.gate-problems{display:flex;flex-direction:column;gap:3px;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);}
+.gate-prob-tag{display:flex;align-items:center;gap:4px;font-size:9px;border-radius:3px;padding:2px 5px;font-family:var(--sans);}
+.gate-prob-icon{font-size:10px;flex-shrink:0;}
+.gate-prob-name{font-size:10px;line-height:1.25;font-weight:600;}
+.hook-caveat{background:rgba(240,180,41,0.07);border:1px solid rgba(240,180,41,0.25);border-radius:5px;padding:7px 12px;font-size:11px;color:var(--text);line-height:1.5;flex-shrink:0;}
+.hook-caveat strong{color:var(--accent3);}
 
 /* ══ S4: SOFT ══ */
-#s4 .soft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;flex:1;overflow:hidden;}
-.soft-card{background:var(--surface);border:1px solid rgba(0,229,255,0.12);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;transition:all 0.2s;}
+#s4 code{font-family:var(--mono);font-size:0.92em;color:#ecf7ff;background:rgba(0,0,0,0.18);padding:1px 4px;border-radius:4px;}
+#s4 h1{font-size:clamp(34px,4vw,52px);line-height:0.98;}
+#s4 .soft-layout{display:grid;grid-template-columns:minmax(0,0.98fr) minmax(0,1.02fr);gap:12px;margin-top:8px;flex:1;min-height:0;}
+.context-panel{display:flex;flex-direction:column;gap:12px;min-height:0;}
+.water-stage,.system-panel,.context-scenarios{position:relative;border:1px solid rgba(0,229,255,0.14);border-radius:10px;background:linear-gradient(180deg,rgba(10,21,31,0.96),rgba(9,14,22,0.96));overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.03);}
+.water-stage::before,.system-panel::before,.context-scenarios::before{content:'';position:absolute;inset:auto -18% 58% auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,255,0.08),rgba(0,229,255,0));pointer-events:none;}
+.context-main{display:grid;grid-template-columns:minmax(0,0.98fr) minmax(0,1.02fr);gap:14px;flex:1;min-height:0;position:relative;z-index:1;}
+.water-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:0;padding:18px 16px;}
+.water-cup{position:relative;width:156px;height:228px;border:3px solid rgba(191,238,255,0.9);border-radius:24px 24px 34px 34px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(0,0,0,0.12));box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06),0 16px 38px rgba(0,0,0,0.38);overflow:hidden;}
+.water-cup::before{content:'';position:absolute;left:14px;top:18px;bottom:18px;width:2px;background:linear-gradient(180deg,rgba(255,255,255,0.28),rgba(255,255,255,0));opacity:0.7;}
+.water-cup::after{content:'';position:absolute;top:-10px;left:26px;right:26px;height:16px;border:2px solid rgba(191,238,255,0.75);border-bottom:none;border-radius:999px 999px 0 0;opacity:0.55;}
+.water-fill{position:absolute;left:0;right:0;bottom:0;height:88%;background:linear-gradient(180deg,rgba(95,235,255,0.92),rgba(0,168,215,0.94));transition:height 600ms ease,background 400ms ease;}
+.water-fill::before{content:'';position:absolute;left:-10%;right:-10%;top:-10px;height:18px;background:radial-gradient(circle at 20% 60%,rgba(255,255,255,0.55),rgba(255,255,255,0) 30%),radial-gradient(circle at 70% 40%,rgba(255,255,255,0.4),rgba(255,255,255,0) 26%),linear-gradient(180deg,rgba(255,255,255,0.35),rgba(255,255,255,0));animation:waterWave 2.6s linear infinite;}
+.water-percent{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:11px;color:#ffffff;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,0.45);}
+.context-caption{font-size:11px;color:#cfe2f4;line-height:1.55;text-align:center;max-width:26ch;min-height:44px;}
+.system-panel{display:flex;flex-direction:column;gap:10px;padding:12px 13px;min-height:0;}
+.system-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.system-kicker{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:#8db6cf;text-transform:uppercase;}
+.system-title{font-family:var(--cond);font-size:19px;font-weight:700;color:#fff;text-transform:uppercase;line-height:1.05;margin-top:2px;}
+.retro-icon{width:58px;height:44px;flex-shrink:0;opacity:0.95;}
+.system-meter-row{display:flex;flex-direction:column;gap:5px;}
+.system-meter-label{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:9px;color:#afc6d7;text-transform:uppercase;letter-spacing:1px;}
+.system-meter-track{height:10px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;}
+.system-meter-fill{height:100%;border-radius:999px;transition:width 600ms ease,background 300ms ease;}
+.system-meter-fill.cpu{background:linear-gradient(90deg,#ffcf54,#ff7b3d);}
+.system-meter-fill.ram{background:linear-gradient(90deg,#00e5ff,#5fefff);}
+.context-meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.context-meta{display:flex;flex-direction:column;gap:4px;padding:8px 9px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);}
+.context-meta-label{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:#88a6bc;text-transform:uppercase;}
+.context-meta-value{font-size:11px;color:#eef7ff;font-weight:600;line-height:1.35;}
+.system-note{font-size:11px;color:#cfdfeb;line-height:1.55;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06);}
+.context-scenarios{display:flex;flex-direction:column;gap:8px;padding:10px 11px;flex-shrink:0;}
+.context-scenarios-head{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#8fd5df;text-transform:uppercase;}
+.context-events{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;position:relative;z-index:1;}
+.context-event{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:8px 9px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#d4e2ee;cursor:pointer;transition:all 0.18s;}
+.context-event:hover{border-color:rgba(0,229,255,0.32);background:rgba(0,229,255,0.06);}
+.context-event.active{border-color:rgba(0,229,255,0.45);background:rgba(0,229,255,0.1);box-shadow:0 0 0 1px rgba(0,229,255,0.08) inset;}
+.context-event-name{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#f2fbff;}
+.context-event-drain{font-size:10px;color:#9bc0d8;line-height:1.35;}
+#s4 .soft-side{display:flex;min-height:0;}
+#s4 .soft-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:8px;flex:1;min-height:0;overflow:hidden;}
+.soft-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid rgba(0,229,255,0.12);border-left:3px solid var(--accent);border-radius:6px;padding:11px 12px;transition:all 0.2s;min-height:0;}
 .soft-card:hover{background:var(--surface2);border-left-color:var(--accent4);}
-.soft-header{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.soft-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .soft-icon{width:24px;height:24px;border-radius:5px;background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.13);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
-.soft-title{font-family:var(--cond);font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;}
+.soft-title{font-family:var(--cond);font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;line-height:1.1;}
 .soft-items{list-style:none;display:flex;flex-direction:column;gap:3px;}
-.soft-items li{font-size:11px;color:#8aaccc;padding-left:12px;position:relative;line-height:1.4;}
+.soft-items li{font-size:10px;color:#8aaccc;padding-left:12px;position:relative;line-height:1.32;}
 .soft-items li::before{content:'›';position:absolute;left:0;color:var(--accent4);}
+.soft-problems{display:flex;flex-direction:column;gap:5px;margin-top:auto;padding-top:7px;border-top:1px solid rgba(255,255,255,0.06);}
+.soft-problems-label{font-family:var(--mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#8fd5df;}
+.soft-problem-row{display:flex;flex-wrap:wrap;gap:5px;}
+.soft-problem-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);font-family:var(--mono);font-size:7px;letter-spacing:0.04em;color:#d7e6f2;line-height:1;}
+.soft-problem-chip .spi{font-size:10px;line-height:1;}
+@keyframes waterWave{0%{transform:translateX(-8%) scaleX(1.02)}50%{transform:translateX(8%) scaleX(0.98)}100%{transform:translateX(-8%) scaleX(1.02)}}
 
 /* ══ S5: QUIZ ══ */
 #s5 .quiz-outer{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;}
@@ -185,7 +248,7 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
   <p class="title-sub">LLM-assisted dev promises 10× delivery. But faster code isn't faster software — and the hidden costs compound fast.</p>
   <div class="slide-list">
     <div class="slide-list-item" onclick="goTo(1)"><span class="slide-num">01</span>The Business Problem — does the paradigm even work?</div>
-    <div class="slide-list-item" onclick="goTo(2)"><span class="slide-num">02</span>12 Observed Problems in Production LLM Systems</div>
+    <div class="slide-list-item" onclick="goTo(2)"><span class="slide-num">02</span>14 Observed Problems in Production LLM Systems</div>
     <div class="slide-list-item" onclick="goTo(3)"><span class="slide-num">03</span>Hard Interventions — Hooks &amp; Deterministic Gates</div>
     <div class="slide-list-item" onclick="goTo(4)"><span class="slide-num">04</span>Soft Interventions — Prompts, Context &amp; Workflow</div>
     <div class="slide-list-item" onclick="goTo(5)"><span class="slide-num">05</span>Quick-Fire Quiz: Know Your Pitfalls?</div>
@@ -266,27 +329,107 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
 <div class="slide" id="s2">
   <div class="corner-decor">SLIDE 02 / OBSERVED PROBLEMS</div>
   <div class="slide-label">02 — Observed Problems in LLM Coding Systems</div>
-  <h1>12 Ways It <span class="red">Goes Wrong</span></h1>
-  <p class="subtitle">Observed in Claude Code / OpenCode production workflows. <strong style="color:var(--accent)">Click any card</strong> to reveal full details.</p>
-  <div class="problems-grid" id="prob-grid"></div>
+  <h1>14 Ways It <span class="red">Goes Wrong</span></h1>
+  <div class="s2-layout">
+    <div class="s2-left">
+      <div class="cat-bar" id="cat-bar"></div>
+      <div class="prob-grid-cards" id="prob-grid-cards"></div>
+    </div>
+    <div class="s2-right" id="prob-detail-panel">
+      <div class="detail-empty" id="detail-empty">
+        <div class="detail-empty-icon">←</div>
+        <div class="detail-empty-txt">Select a problem</div>
+      </div>
+      <div id="detail-content" style="display:none;flex-direction:column;height:100%;">
+        <div class="detail-cat-tag" id="d-cat"></div>
+        <div class="detail-title" id="d-title"></div>
+        <div class="detail-body" id="d-body"></div>
+        <div class="detail-divider"></div>
+        <div class="detail-area-row" id="d-area"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- S3: HARD INTERVENTIONS -->
 <div class="slide" id="s3">
   <div class="corner-decor">SLIDE 03 / HARD INTERVENTIONS</div>
   <div class="slide-label">03 — Hard Interventions</div>
-  <h1>Hooks: <span>Deterministic</span> Guardrails</h1>
-  <div class="hard-intro"><strong>Hard interventions</strong> are hooks and automated gates — they execute deterministically and cannot be argued away by a clever prompt. Unlike CLAUDE.md rules (advisory), hooks fire on every action, every time, with zero exceptions.</div>
-  <div class="hook-grid" id="hook-grid"></div>
+  <h1>Hooks: <span>Gates on the</span> Pipeline</h1>
+  <div class="s3-body">
+    <div class="hooks-filter-bar" id="hooks-cat-bar"></div>
+    <div class="pipeline-wrap">
+      <div class="pipeline-track"></div>
+      <div class="gates-row" id="gates-row"></div>
+    </div>
+    <div class="hook-caveat">
+      <strong>⚠️ Caveat:</strong> Hooks are only as good as their design. Overuse fills the context window and degrades soft instructions — the LLM starts spending tokens processing hook output rather than solving your problem. Use hooks for <strong>non-negotiable, high-risk actions only</strong>. Advisory rules belong in CLAUDE.md, not hooks.
+    </div>
+  </div>
 </div>
 
 <!-- S4: SOFT INTERVENTIONS -->
 <div class="slide" id="s4">
   <div class="corner-decor">SLIDE 04 / SOFT INTERVENTIONS</div>
   <div class="slide-label">04 — Soft Interventions</div>
-  <h1>Prompts, Context<br><span>&amp; Workflow</span></h1>
-  <p class="subtitle">Soft interventions shape LLM behavior through prompting, task framing, and session management. Powerful — but advisory, not guaranteed. Pair with hard interventions for the high-risk areas.</p>
-  <div class="soft-grid" id="soft-grid"></div>
+  <h1>Context = <span>Life</span></h1>
+  <div class="soft-layout">
+    <div class="context-panel">
+      <div class="context-main">
+        <div class="water-stage">
+          <div class="water-cup">
+            <div class="water-fill" id="context-water-fill"></div>
+            <div class="water-percent" id="context-water-pct">88%</div>
+          </div>
+          <div class="context-caption" id="context-caption">Healthy session: constraints stay resident and there is still room for the actual task.</div>
+        </div>
+        <div class="system-panel">
+          <div class="system-head">
+            <div>
+              <div class="system-kicker">Attention Is All You Need</div>
+              <div class="system-title">CPU / RAM Analogy</div>
+            </div>
+            <div class="retro-icon" aria-hidden="true">
+              <svg viewBox="0 0 76 56" width="58" height="44" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="6" width="44" height="30" rx="3" fill="#0e1822" stroke="#8dd9e8" stroke-width="2"/>
+                <rect x="16" y="12" width="32" height="16" rx="2" fill="#112839"/>
+                <path d="M18 30h28" stroke="#5fefff" stroke-width="2" opacity="0.85"/>
+                <rect x="22" y="40" width="20" height="4" rx="2" fill="#8dd9e8"/>
+                <rect x="54" y="16" width="14" height="8" rx="2" fill="#ff7b3d" opacity="0.9"/>
+                <rect x="54" y="28" width="10" height="8" rx="2" fill="#00e5ff" opacity="0.85"/>
+              </svg>
+            </div>
+          </div>
+          <div class="system-meter-row">
+            <div class="system-meter-label"><span>CPU / attention</span><span id="context-cpu-val">24%</span></div>
+            <div class="system-meter-track"><div class="system-meter-fill cpu" id="context-cpu-fill" style="width:24%"></div></div>
+          </div>
+          <div class="system-meter-row">
+            <div class="system-meter-label"><span>RAM / context</span><span id="context-ram-val">28%</span></div>
+            <div class="system-meter-track"><div class="system-meter-fill ram" id="context-ram-fill" style="width:28%"></div></div>
+          </div>
+          <div class="context-meta-grid">
+            <div class="context-meta">
+              <span class="context-meta-label">Bias</span>
+              <span class="context-meta-value" id="context-bias">Balanced</span>
+            </div>
+            <div class="context-meta">
+              <span class="context-meta-label">Action</span>
+              <span class="context-meta-value" id="context-action">Keep working</span>
+            </div>
+          </div>
+          <div class="system-note" id="context-note">Recency wins under pressure. The lower the water, the more bottom-of-file bias takes over.</div>
+        </div>
+      </div>
+      <div class="context-scenarios">
+        <div class="context-scenarios-head">Context Killers</div>
+        <div class="context-events" id="context-events"></div>
+      </div>
+    </div>
+    <div class="soft-side">
+      <div class="soft-grid" id="soft-grid"></div>
+    </div>
+  </div>
 </div>
 
 <!-- S5: QUIZ -->
@@ -374,49 +517,62 @@ const TOTAL = 8;
 let current = 0;
 
 const problems = [
-  {area:"Context",      title:"Context Drift",             detail:"Forgets prior constraints in long sessions; repeats bad fixes. LLM performance degrades measurably as the context window passes ~60% full.", icon:"🌀", sev:"high"},
-  {area:"Correctness",  title:"Broken Logic, Looks Fine",   detail:"Correct-looking code with broken state handling and edge cases. The model optimises for surface plausibility, not runtime correctness.", icon:"🐛", sev:"high"},
-  {area:"Architecture", title:"Weak Arch Alignment",        detail:"Noisy, unidiomatic patterns accumulate silently. Without an explicit rubric enforced at review time, every session can introduce a new anti-pattern.", icon:"🏗️", sev:"high"},
-  {area:"Scope",        title:"Scope Creep",                detail:"Unrelated refactors, files, and dependency changes sneak in undetected. Each one multiplies integration bugs and blows up diffs.", icon:"📈", sev:"high"},
-  {area:"Task Defn",    title:"Ambiguous Instructions",     detail:"Without explicit goal, non-goals, and acceptance criteria, the LLM invents its own definition of done — and it's usually wrong.", icon:"📋", sev:"med"},
-  {area:"Tooling",      title:"Tool Misuse & Dead-Ends",    detail:"Wrong tool selection and repeated failures waste cycles. Without a retry policy, Claude can loop indefinitely on the same failing tool call.", icon:"🔧", sev:"med"},
-  {area:"Quality",      title:"Inconsistent Across Runs",   detail:"Same prompt, wildly different output. Model version drift and context state both affect quality unpredictably across sessions.", icon:"🎲", sev:"med"},
-  {area:"ROI",          title:"Supervision Overhead",       detail:"Human review time often exceeds time saved. Without token/time budgets and stop conditions, tasks balloon with no natural termination.", icon:"👁️", sev:"med"},
-  {area:"Security",     title:"Security & Safety Risk",     detail:"Destructive commands, .env reads, and unsafe ops execute without guardrails unless you explicitly deny them in hooks.", icon:"🔐", sev:"high"},
-  {area:"Testing",      title:"Regression Risk",            detail:"Touched areas lack test coverage; regressions propagate silently downstream. 'Done' responses without attached test evidence are meaningless.", icon:"📉", sev:"high"},
-  {area:"Orchestration","title":"Weak Multi-Agent Teams",   detail:"True team orchestration is limited in current tooling. Interim task-based orchestrator/subagent patterns break on complex, interdependent workflows.", icon:"🤖", sev:"low"},
-  {area:"Platform",     title:"Provider Portability Pain",  detail:"Auth, plugin setup, and tool-specific assumptions create silent lock-in. Keep prompts provider-neutral and auth setup scripted from day one.", icon:"🔌", sev:"low"},
+  {cat:"Context & Memory", area:"Context", title:"Context Drift", detail:"Forgets prior constraints in long sessions; repeats bad fixes. LLM performance degrades measurably as the context window passes ~60% full.", icon:"🌀", sev:"high"},
+  {cat:"Context & Memory", area:"Context", title:"Context Window Exhaustion", detail:"As the context window fills, the model silently starts dropping earlier instructions. Sessions that span large codebases hit this wall fast — and there's no error, just degraded output.", icon:"📦", sev:"high"},
+  {cat:"Correctness", area:"Correctness", title:"Broken Logic, Looks Fine", detail:"Correct-looking code with broken state handling and edge cases. The model optimises for surface plausibility, not runtime correctness.", icon:"🐛", sev:"high"},
+  {cat:"Correctness", area:"Testing", title:"Regression Risk", detail:"Touched areas lack test coverage; regressions propagate silently downstream. 'Done' responses without attached test evidence are meaningless.", icon:"📉", sev:"high"},
+  {cat:"Correctness", area:"Quality", title:"Inconsistent Across Runs", detail:"Same prompt, wildly different output. Model version drift and context state both affect quality unpredictably across sessions.", icon:"🎲", sev:"med"},
+  {cat:"Planning & Scope", area:"Task Defn", title:"Ambiguous Instructions", detail:"Without explicit goal, non-goals, and acceptance criteria, the LLM invents its own definition of done — and it's usually wrong.", icon:"📋", sev:"med"},
+  {cat:"Planning & Scope", area:"Scope", title:"Scope Creep", detail:"Unrelated refactors, files, and dependency changes sneak in undetected. Each one multiplies integration bugs and blows up diffs.", icon:"📈", sev:"high"},
+  {cat:"Planning & Scope", area:"Architecture", title:"Reinventing the Wheel", detail:"Builds custom implementations of things that already exist as mature libraries or platform primitives. Wastes cycles and introduces untested, unmaintained code into the codebase.", icon:"🔄", sev:"med"},
+  {cat:"Architecture", area:"Architecture", title:"Weak Arch Alignment", detail:"Noisy, unidiomatic patterns accumulate silently. Without an explicit rubric enforced at review time, every session can introduce a new anti-pattern.", icon:"🏗️", sev:"high"},
+  {cat:"Orchestration", area:"Tooling", title:"Tool Misuse & Dead-Ends", detail:"Wrong tool selection and repeated failures waste cycles. Without a retry policy, Claude can loop indefinitely on the same failing tool call.", icon:"🔧", sev:"med"},
+  {cat:"Orchestration", area:"Orchestration", title:"Subagent Infinite Loops", detail:"Subagents spawn further subagents or retry the same failing action indefinitely with no circuit-breaker. Sessions burn tokens and time with no progress surfaced to the orchestrator.", icon:"♾️", sev:"high"},
+  {cat:"Orchestration", area:"Orchestration", title:"Weak Multi-Agent Teams", detail:"True team orchestration is limited in current tooling. Interim task-based orchestrator/subagent patterns break on complex, interdependent workflows.", icon:"🤖", sev:"low"},
+  {cat:"Security & Ops", area:"Security", title:"Security & Safety Risk", detail:"Destructive commands, .env reads, and unsafe ops execute without guardrails unless you explicitly deny them in hooks.", icon:"🔐", sev:"high"},
+  {cat:"Security & Ops", area:"ROI", title:"Supervision Overhead", detail:"Human review time often exceeds time saved. Without token/time budgets and stop conditions, tasks balloon with no natural termination.", icon:"👁️", sev:"med"},
 ];
+
+const CATEGORIES = ["All", "Context & Memory", "Correctness", "Planning & Scope", "Architecture", "Orchestration", "Security & Ops"];
+let activeCategory = "All";
+let selectedProblem = null;
+
+const CAT_COLORS = {
+  'Context & Memory': {color:'#00e5ff', bg:'rgba(0,229,255,0.08)', border:'rgba(0,229,255,0.25)'},
+  'Correctness': {color:'#a78bfa', bg:'rgba(167,139,250,0.08)', border:'rgba(167,139,250,0.25)'},
+  'Planning & Scope': {color:'#f0b429', bg:'rgba(240,180,41,0.08)', border:'rgba(240,180,41,0.25)'},
+  'Architecture': {color:'#ff7b3d', bg:'rgba(255,123,61,0.08)', border:'rgba(255,123,61,0.25)'},
+  'Orchestration': {color:'#39d353', bg:'rgba(57,211,83,0.08)', border:'rgba(57,211,83,0.25)'},
+  'Security & Ops': {color:'#ff3d6b', bg:'rgba(255,61,107,0.08)', border:'rgba(255,61,107,0.25)'},
+};
 
 const hooks = [
-  {title:"Diff-Scope Gate",       trigger:"PostToolUse: Edit/Write",
-   code:`<span class="c"># Block writes outside approved paths</span>\nif changed_path not in APPROVED_PATHS:\n    sys.exit(1)  <span class="c"># hard stop</span>`,
-   desc:"Physically prevents scope creep. If Claude edits a file outside the approved set, the hook fails the action — no prompt can override this."},
-  {title:"Dependency Gate",       trigger:"PostToolUse: Bash",
-   code:`<span class="c"># Catch unauthorized dep installs</span>\nif 'npm install' in cmd or 'pip install' in cmd:\n    require_explicit_approval()`,
-   desc:"Any new dependency requires a human approval step. Prevents silent library bloat and supply-chain drift before it reaches git."},
-  {title:"Test Evidence Gate",    trigger:"Stop: before 'done'",
-   code:`<span class="c"># Block completion without test output</span>\nif not has_test_evidence(response):\n    inject("Run tests. Attach output.")`,
-   desc:"Claude cannot mark a task complete unless test output is attached. Turns 'done' from a claim into evidence."},
-  {title:"Security Denylist",     trigger:"PreToolUse: Bash",
-   code:`<span class="c"># Block destructive / secret-exposing ops</span>\nDENY = ['rm -rf /','cat .env','curl|bash']\nif any(d in cmd for d in DENY): sys.exit(1)`,
-   desc:"Hard-denies known destructive commands and secret-exposure patterns before they execute. No prompt can un-block these."},
-  {title:"Retry → Diagnose",      trigger:"PostToolUse: repeated fail",
-   code:`<span class="c"># After N failures, force diagnose mode</span>\nif fail_count >= 3:\n    inject("Switch to diagnose. Explain why.")`,
-   desc:"Breaks infinite tool-retry loops. After N consecutive failures, automatically forces Claude into diagnostic mode with an explanation requirement."},
-  {title:"Constraint Injection",  trigger:"PreSampling: every turn",
-   code:`<span class="c"># Pin CONSTRAINTS.md into every turn</span>\nsystem += read_file('CONSTRAINTS.md')\n<span class="c"># Survives context compaction</span>`,
-   desc:"CONSTRAINTS.md is programmatically injected into every sampling call. Unlike CLAUDE.md which can drift, this fires deterministically."},
+  {title:"Diff-Scope Gate", trigger:"PostToolUse: Edit/Write", desc:"Fails any write outside approved paths. Scope creep is physically blocked.", problems:["Scope Creep","Reinventing the Wheel"]},
+  {title:"Dependency Gate", trigger:"PostToolUse: Bash", desc:"Intercepts installs and requires explicit approval before any new dependency lands.", problems:["Scope Creep","Reinventing the Wheel","Security & Safety Risk"]},
+  {title:"Test Evidence Gate", trigger:"Stop: before 'done'", desc:"Blocks completion unless test output is attached. Done is evidence, not a claim.", problems:["Regression Risk","Broken Logic, Looks Fine","Inconsistent Across Runs"]},
+  {title:"Security Denylist", trigger:"PreToolUse: Bash", desc:"Hard-denies destructive commands and secret-exposure patterns before execution.", problems:["Security & Safety Risk"]},
+  {title:"Retry → Diagnose", trigger:"PostToolUse: N failures", desc:"After N repeated failures switches to diagnose mode — breaks infinite loops dead.", problems:["Tool Misuse & Dead-Ends","Subagent Infinite Loops","Supervision Overhead"]},
+  {title:"Constraint Injection", trigger:"PreSampling: every turn", desc:"Pins CONSTRAINTS.md into every sampling call. Survives compaction, cannot be forgotten.", problems:["Context Drift","Context Window Exhaustion","Ambiguous Instructions"]},
 ];
+let activeHookCategory = "All";
 
 const softs = [
-  {icon:"📌", title:"Context Pinning",        items:["CONSTRAINTS.md read at session start","Turn-level constraint check in orchestrator prompt","Keep pre-compaction transform active for critical rules"]},
-  {icon:"🧪", title:"Test-First Decomposition", items:["Require test cases before any implementation starts","Use team-review subagent as a mandatory pass","Block 'done' responses unless test output is attached"]},
-  {icon:"🏛️", title:"Architecture Rubric",    items:["Checklist run during every review pass","'No new pattern without written rationale' rule enforced","Architecture impact note required per change / PR"]},
-  {icon:"📝", title:"Standardized Task Intake", items:["Template: goal / non-goals / file scope / acceptance tests","Orchestrator splits large asks into subtasks before coding","Reject execution when acceptance criteria are missing"]},
-  {icon:"🔁", title:"Failure & Retry Policy",  items:["After 2 bad corrections: /clear and rephrase from scratch","Diagnose-mode prompt injected automatically on repeated fail","Failure summaries required before resuming work"]},
-  {icon:"📊", title:"Token & Time Budgets",   items:["Budget per task with explicit stop conditions","Auto-log rework causes to .context/ for weekly prompt tuning","Prefer boilerplate / refactor / docs as first automation wins"]},
+  {icon:"📌", title:"Context Pinning", items:["CONSTRAINTS.md read at session start","Turn-level constraint check in orchestrator prompt","Keep pre-compaction transform active for critical rules"], problems:[["Context Drift","DRIFT"],["Context Window Exhaustion","WINDOW"],["Ambiguous Instructions","TASK DEF"]]},
+  {icon:"🧪", title:"Test-First Decomposition", items:["Require test cases before any implementation starts","Use team-review subagent as a mandatory pass","Block 'done' responses unless test output is attached"], problems:[["Broken Logic, Looks Fine","LOGIC"],["Regression Risk","REGRESS"],["Inconsistent Across Runs","VARIANCE"]]},
+  {icon:"🏛️", title:"Architecture Rubric", items:["Checklist run during every review pass","'No new pattern without written rationale' rule enforced","Architecture impact note required per change / PR"], problems:[["Weak Arch Alignment","ARCH"],["Reinventing the Wheel","WHEEL"],["Scope Creep","SCOPE"]]},
+  {icon:"📝", title:"Standardized Task Intake", items:["Template: goal / non-goals / file scope / acceptance tests","Orchestrator splits large asks into subtasks before coding","Reject execution when acceptance criteria are missing"], problems:[["Ambiguous Instructions","TASK DEF"],["Scope Creep","SCOPE"],["Weak Multi-Agent Teams","TEAMS"]]},
+  {icon:"🔁", title:"Failure & Retry Policy", items:["After 2 bad corrections: /clear and rephrase from scratch","Diagnose-mode prompt injected automatically on repeated fail","Failure summaries required before resuming work"], problems:[["Tool Misuse & Dead-Ends","TOOLING"],["Subagent Infinite Loops","LOOPS"],["Supervision Overhead","OVERSIGHT"]]},
+  {icon:"📊", title:"Token & Time Budgets", items:["Budget per task with explicit stop conditions","Auto-log rework causes to .context/ for weekly prompt tuning","Prefer boilerplate / refactor / docs as first automation wins"], problems:[["Context Window Exhaustion","WINDOW"],["Supervision Overhead","OVERSIGHT"],["Tool Misuse & Dead-Ends","TOOLING"]]},
 ];
+const contextScenarios = [
+  {label:"Healthy Session", trigger:"Baseline", drain:"Constraints fit", water:88, cpu:24, ram:28, bias:"Balanced", action:"Keep working", caption:"Healthy session: constraints stay resident and there is still room for the actual task.", note:"Water is life. When the tank is full enough, the model can still attend to constraints, current code, and the real problem at the same time."},
+  {label:"Long Session", trigger:"Long session", drain:"Earlier turns fade", water:66, cpu:46, ram:54, bias:"Recency rising", action:"Compact or split task", caption:"Long sessions drain the tank. Earlier constraints start slipping even before they disappear completely.", note:"Attention tilts toward the newest tokens. The older the instruction, the more likely it gets crowded out by recency."},
+  {label:"Disk Replay", trigger:"Replay from disk", drain:"More text != more attention", water:48, cpu:68, ram:74, bias:"Bottom-of-file bias", action:"Trim and reframe", caption:"Reloading instructions from disk does not help if there is no room left for the model to process them well.", note:"If context is already low, re-injecting CONSTRAINTS.md or giant prompts just adds more pressure to the same limited window."},
+  {label:"Hook Overuse", trigger:"Over-use hooks", drain:"Hooks spend the budget", water:31, cpu:84, ram:86, bias:"Hook output dominates", action:"Move advice out of hooks", caption:"Every hook response consumes the same scarce context budget. Overuse the hooks and you starve the real task.", note:"Hooks should guard non-negotiables only. Advisory guidance belongs in prompts and workflow, not in a flood of hook output."},
+  {label:"Old-School Computer", trigger:"Keep pushing", drain:"Session rot", water:14, cpu:95, ram:97, bias:"Recency dominates", action:"Restart session", caption:"This is the old-computer moment. The machine is technically on, but useful work is over until you reboot the session.", note:"Once CPU and RAM are effectively saturated, the right move is restart, not more instructions. The context tank is empty."},
+];
+let activeContextScenario = 0;
+let contextCycleTimer = null;
 
 const bestPractices = [
   {tag:"Context Management", title:"Context Window is Your #1 Resource",
@@ -468,20 +624,136 @@ const quizData = [
 
 // Render interactive cards and quiz content from static data.
 function renderProblems(){
-  const g=document.getElementById('prob-grid'); g.innerHTML='';
-  problems.forEach(p=>{
-    const d=document.createElement('div'); d.className='prob-card'; d.setAttribute('data-icon',p.icon);
-    d.innerHTML=`<div class="prob-area"><span class="severity sev-${p.sev}"></span>${p.area}</div><div class="prob-title">${p.title}</div><div class="prob-detail">${p.detail}</div>`;
-    d.onclick=()=>d.classList.toggle('expanded'); g.appendChild(d);
-  });
+  const bar=document.getElementById('cat-bar');
+  if(bar){
+    bar.innerHTML='';
+    CATEGORIES.forEach(cat=>{
+      const btn=document.createElement('button');
+      const cc=CAT_COLORS[cat];
+      const isActive=cat === activeCategory;
+      btn.className='cat-btn' + (isActive ? ' active' : '');
+      btn.textContent=cat === 'All' ? `All (${problems.length})` : cat;
+      if(cc){
+        btn.style.borderColor=isActive ? cc.color : 'rgba(255,255,255,0.1)';
+        btn.style.color=isActive ? '#000' : cc.color;
+        btn.style.background=isActive ? cc.color : cc.bg;
+      } else {
+        btn.style.borderColor=isActive ? 'var(--accent)' : 'var(--border)';
+        btn.style.color=isActive ? '#000' : 'var(--text-dim)';
+        btn.style.background=isActive ? 'var(--accent)' : 'transparent';
+      }
+      btn.onclick=()=>{ activeCategory=cat; selectedProblem=null; renderProblems(); };
+      bar.appendChild(btn);
+    });
+  }
+
+  const grid=document.getElementById('prob-grid-cards');
+  if(grid){
+    grid.innerHTML='';
+    const filtered=activeCategory === 'All' ? problems : problems.filter(p=>p.cat === activeCategory);
+    filtered.forEach(p=>{
+      const cc=CAT_COLORS[p.cat] || {color:'#fff', bg:'rgba(255,255,255,0.05)', border:'rgba(255,255,255,0.15)'};
+      const card=document.createElement('div');
+      card.className='prob-card2' + (selectedProblem === p ? ' active-card' : '');
+      card.style.background=cc.bg;
+      card.style.borderColor=selectedProblem === p ? cc.color : cc.border;
+      const topBar=document.createElement('div');
+      topBar.style.cssText=`position:absolute;top:0;left:0;right:0;height:2px;background:${cc.color};border-radius:6px 6px 0 0;`;
+      card.innerHTML=`<span class="pc-icon">${p.icon}</span><div class="pc-title">${p.title}</div><div class="pc-cat" style="color:${cc.color}">${p.cat}</div>`;
+      card.prepend(topBar);
+      card.onclick=()=>{ selectedProblem=p; renderProblems(); };
+      grid.appendChild(card);
+    });
+  }
+
+  const empty=document.getElementById('detail-empty');
+  const content=document.getElementById('detail-content');
+  const panel=document.getElementById('prob-detail-panel');
+  if(selectedProblem){
+    const cc=CAT_COLORS[selectedProblem.cat] || {color:'#fff'};
+    if(empty)empty.style.display='none';
+    if(content)content.style.display='flex';
+    document.getElementById('d-cat').textContent=selectedProblem.cat;
+    document.getElementById('d-cat').style.color=cc.color;
+    document.getElementById('d-title').textContent=selectedProblem.title;
+    document.getElementById('d-body').textContent=selectedProblem.detail;
+    document.getElementById('d-area').textContent=`Area: ${selectedProblem.area}`;
+    if(panel)panel.style.borderColor=cc.color;
+    return;
+  }
+
+  if(empty)empty.style.display='flex';
+  if(content)content.style.display='none';
+  if(panel)panel.style.borderColor='var(--border)';
 }
 
 function renderHooks(){
-  const g=document.getElementById('hook-grid'); g.innerHTML='';
-  hooks.forEach(h=>{
-    const el=document.createElement('div'); el.className='hook-card';
-    el.innerHTML=`<div class="hook-header"><div class="hook-badge">HOOK</div><div class="hook-title">${h.title}</div></div><div class="hook-trigger">${h.trigger}</div><div class="hook-code">${h.code}</div><div class="hook-desc">${h.desc}</div>`;
-    g.appendChild(el);
+  const filterBar=document.getElementById('hooks-cat-bar');
+  const row=document.getElementById('gates-row');
+  if(!row)return;
+  if(filterBar){
+    filterBar.innerHTML='';
+    CATEGORIES.forEach(cat=>{
+      const btn=document.createElement('button');
+      const cc=CAT_COLORS[cat];
+      const isActive=cat === activeHookCategory;
+      btn.className='cat-btn' + (isActive ? ' active' : '');
+      btn.textContent=cat === 'All' ? `All Gates (${hooks.length})` : cat;
+      if(cc){
+        btn.style.borderColor=isActive ? cc.color : 'rgba(255,255,255,0.1)';
+        btn.style.color=isActive ? '#000' : cc.color;
+        btn.style.background=isActive ? cc.color : cc.bg;
+      } else {
+        btn.style.borderColor=isActive ? 'var(--accent)' : 'var(--border)';
+        btn.style.color=isActive ? '#000' : 'var(--text-dim)';
+        btn.style.background=isActive ? 'var(--accent)' : 'transparent';
+      }
+      btn.onclick=()=>{ activeHookCategory=cat; renderHooks(); };
+      filterBar.appendChild(btn);
+    });
+  }
+
+  const filteredHooks=activeHookCategory === 'All'
+    ? hooks
+    : hooks.filter(h=>h.problems.some(problemTitle=>{
+        const problem=problems.find(item=>item.title === problemTitle);
+        return problem?.cat === activeHookCategory;
+      }));
+
+  row.innerHTML='';
+  row.style.gridTemplateColumns=`repeat(${Math.max(filteredHooks.length, 3)}, minmax(0,1fr))`;
+
+  filteredHooks.forEach(h=>{
+    const card=document.createElement('div');
+    card.className='gate-card';
+
+    const gateSvg=`<svg width="40" height="26" viewBox="0 0 40 26" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="9" x2="9" y2="9" stroke="#ff3d6b" stroke-width="1.5" opacity="0.7"/>
+      <line x1="0" y1="17" x2="9" y2="17" stroke="#ff3d6b" stroke-width="1.5" opacity="0.7"/>
+      <path d="M9 4 L9 22 Q30 22 30 13 Q30 4 9 4 Z" fill="rgba(255,61,107,0.1)" stroke="#ff3d6b" stroke-width="1.5"/>
+      <line x1="30" y1="13" x2="40" y2="13" stroke="#ff3d6b" stroke-width="1.5" opacity="0.7"/>
+      <path d="M15 13 L18 16.5 L24 9.5" stroke="#39d353" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+
+    const probTags=h.problems.map(problemTitle=>{
+      const problem=problems.find(item=>item.title === problemTitle);
+      if(!problem)return '';
+      const cc=CAT_COLORS[problem.cat] || {color:'#fff', bg:'rgba(255,255,255,0.05)'};
+      const dimmed=activeHookCategory !== 'All' && problem.cat !== activeHookCategory;
+      return `<div class="gate-prob-tag" style="background:${cc.bg};border:1px solid ${cc.color}30">
+        <span class="gate-prob-icon">${problem.icon}</span>
+        <span class="gate-prob-name" style="color:${cc.color};opacity:${dimmed ? '0.5' : '1'}">${problem.title}</span>
+      </div>`;
+    }).join('');
+
+    card.innerHTML=`
+      <div class="gate-sym">${gateSvg}</div>
+      <div class="gate-name">${h.title}</div>
+      <div class="gate-trigger">${h.trigger}</div>
+      <div class="gate-desc">${h.desc}</div>
+      <div class="gate-problems">${probTags}</div>`;
+
+    row.appendChild(card);
   });
 }
 
@@ -489,9 +761,82 @@ function renderSoft(){
   const g=document.getElementById('soft-grid'); g.innerHTML='';
   softs.forEach(s=>{
     const el=document.createElement('div'); el.className='soft-card';
-    el.innerHTML=`<div class="soft-header"><div class="soft-icon">${s.icon}</div><div class="soft-title">${s.title}</div></div><ul class="soft-items">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    const chips=(s.problems || []).map(([problemTitle,label])=>{
+      const problem=problems.find(item=>item.title === problemTitle);
+      if(!problem)return '';
+      return `<span class="soft-problem-chip"><span class="spi">${problem.icon}</span><span>${label}</span></span>`;
+    }).join('');
+    el.innerHTML=`<div class="soft-header"><div class="soft-icon">${s.icon}</div><div class="soft-title">${s.title}</div></div><ul class="soft-items">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul><div class="soft-problems"><div class="soft-problems-label">Addresses</div><div class="soft-problem-row">${chips}</div></div>`;
     g.appendChild(el);
   });
+}
+
+function applyContextScenario(index){
+  const scenario=contextScenarios[index];
+  const waterFill=document.getElementById('context-water-fill');
+  const waterPct=document.getElementById('context-water-pct');
+  const caption=document.getElementById('context-caption');
+  const cpuFill=document.getElementById('context-cpu-fill');
+  const cpuVal=document.getElementById('context-cpu-val');
+  const ramFill=document.getElementById('context-ram-fill');
+  const ramVal=document.getElementById('context-ram-val');
+  const bias=document.getElementById('context-bias');
+  const action=document.getElementById('context-action');
+  const note=document.getElementById('context-note');
+  const buttons=document.querySelectorAll('.context-event');
+  if(!waterFill || !waterPct || !caption || !cpuFill || !cpuVal || !ramFill || !ramVal || !bias || !action || !note)return;
+
+  activeContextScenario=index;
+  waterFill.style.height=`${scenario.water}%`;
+  waterFill.style.background=scenario.water > 60
+    ? 'linear-gradient(180deg,rgba(95,235,255,0.92),rgba(0,168,215,0.94))'
+    : scenario.water > 30
+    ? 'linear-gradient(180deg,rgba(255,220,104,0.96),rgba(240,180,41,0.94))'
+    : 'linear-gradient(180deg,rgba(255,129,84,0.98),rgba(255,61,107,0.96))';
+  waterPct.textContent=`${scenario.water}%`;
+  caption.textContent=scenario.caption;
+  cpuFill.style.width=`${scenario.cpu}%`;
+  cpuVal.textContent=`${scenario.cpu}%`;
+  ramFill.style.width=`${scenario.ram}%`;
+  ramVal.textContent=`${scenario.ram}%`;
+  bias.textContent=scenario.bias;
+  action.textContent=scenario.action;
+  note.textContent=scenario.note;
+
+  buttons.forEach((button, buttonIndex)=>button.classList.toggle('active', buttonIndex === index));
+}
+
+function renderContextPanel(){
+  const wrap=document.getElementById('context-events');
+  if(!wrap)return;
+  wrap.innerHTML='';
+  contextScenarios.forEach((scenario, index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='context-event' + (index === activeContextScenario ? ' active' : '');
+    button.innerHTML=`<span class="context-event-name">${scenario.trigger}</span><span class="context-event-drain">${scenario.drain}</span>`;
+    button.onclick=()=>{
+      applyContextScenario(index);
+      startContextCycle();
+    };
+    wrap.appendChild(button);
+  });
+  applyContextScenario(activeContextScenario);
+}
+
+function stopContextCycle(){
+  if(contextCycleTimer){
+    clearInterval(contextCycleTimer);
+    contextCycleTimer=null;
+  }
+}
+
+function startContextCycle(){
+  stopContextCycle();
+  contextCycleTimer=setInterval(()=>{
+    activeContextScenario=(activeContextScenario + 1) % contextScenarios.length;
+    applyContextScenario(activeContextScenario);
+  }, 2600);
 }
 
 function renderBP(){
@@ -716,6 +1061,7 @@ function goTo(n){
   document.getElementById('s'+current)?.classList.add('active');
   updateNav();
   if(current===1){updateBomb();}
+  if(current===4){startContextCycle();} else {stopContextCycle();}
   if(current===5){buildQuizDots();renderQuiz();}
 }
 
@@ -727,7 +1073,7 @@ document.addEventListener('keydown',e=>{
   if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();prev();}
 });
 
-renderProblems();renderHooks();renderSoft();renderBP();buildDots();updateNav();
+renderProblems();renderHooks();renderSoft();renderContextPanel();renderBP();buildDots();updateNav();
 sizeCanvas();
 window.addEventListener('resize',()=>{if(current===1)updateBomb();});
 </script>
