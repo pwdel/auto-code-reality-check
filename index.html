@@ -28,6 +28,10 @@ h1 .red{color:var(--accent2);}
 .nav-btn:hover{border-color:var(--accent);color:var(--accent);}
 .nav-btn:disabled{opacity:0.2;cursor:default;}
 #slide-counter{font-family:var(--mono);font-size:10px;color:var(--text-dim);min-width:40px;text-align:center;}
+#traceability{position:fixed;left:18px;bottom:18px;display:flex;align-items:center;gap:8px;z-index:120;background:rgba(13,21,32,0.92);border:1px solid var(--border);border-radius:40px;padding:7px 12px;backdrop-filter:blur(12px);}
+.trace-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;}
+.trace-link{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text);text-decoration:none;font-family:var(--mono);font-size:10px;letter-spacing:1px;line-height:1.4;overflow-wrap:anywhere;transition:all 0.2s;}
+.trace-link:hover{border-color:var(--accent);color:var(--accent);}
 .dot-nav{display:flex;gap:5px;}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.2s;}
 .dot.active{background:var(--accent);width:16px;border-radius:3px;}
@@ -55,6 +59,10 @@ h1 .red{color:var(--accent2);}
 .title-main{font-family:var(--cond);font-size:clamp(46px,6.5vw,86px);font-weight:900;text-transform:uppercase;line-height:0.92;color:#fff;letter-spacing:-2px;}
 .title-main .line2{color:var(--accent2);}
 .title-sub{margin-top:18px;font-size:14px;color:var(--text-dim);font-weight:300;max-width:520px;line-height:1.65;border-left:2px solid var(--border);padding-left:14px;}
+.title-byline{display:inline-flex;flex-wrap:wrap;align-items:center;gap:10px;width:fit-content;max-width:100%;margin-top:16px;padding:10px 14px;border:1px solid rgba(0,229,255,0.18);border-radius:999px;background:rgba(0,229,255,0.06);}
+.title-byline-label{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#eef9ff;}
+.title-byline-link{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--accent);text-decoration:none;}
+.title-byline-link:hover{color:#fff;}
 .slide-list{margin-top:26px;display:flex;flex-direction:column;gap:5px;}
 .slide-list-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-dim);cursor:pointer;transition:all 0.2s;padding:6px 10px;border-radius:4px;border:1px solid transparent;}
 .slide-list-item:hover{color:var(--text);border-color:var(--border);background:var(--surface);}
@@ -233,6 +241,10 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
 .roi-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-bottom:3px;}
 .roi-track{height:7px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;margin-bottom:9px;}
 .roi-fill{height:100%;border-radius:4px;animation:fillGrow 1.5s ease forwards;}
+
+@media (max-width: 900px){
+  #traceability{left:12px;right:12px;bottom:72px;justify-content:space-between;flex-wrap:wrap;border-radius:16px;padding:10px 12px;}
+}
 </style>
 </head>
 <body>
@@ -246,6 +258,10 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
   <div class="title-kicker">Engineering Leadership Briefing</div>
   <div class="title-main">Auto-Coding<br><span class="line2">Reality Check</span></div>
   <p class="title-sub">LLM-assisted dev promises 10× delivery. But faster code isn't faster software — and the hidden costs compound fast.</p>
+  <div class="title-byline">
+    <span class="title-byline-label">By Patrick Delaney / pwdel</span>
+    <a class="title-byline-link" href="https://github.com/pwdel">github.com/pwdel</a>
+  </div>
   <div class="slide-list">
     <div class="slide-list-item" onclick="goTo(1)"><span class="slide-num">01</span>The Business Problem — does the paradigm even work?</div>
     <div class="slide-list-item" onclick="goTo(2)"><span class="slide-num">02</span>14 Observed Problems in Production LLM Systems</div>
@@ -505,6 +521,12 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
 
 </div><!-- /deck -->
 
+<div id="traceability" aria-label="Traceability links">
+  <span class="trace-label">Traceability</span>
+  <a class="trace-link" id="trace-home-link" href="https://pwdel.github.io/">Main site · pwdel.github.io</a>
+  <a class="trace-link" id="trace-slide-link" href="https://pwdel.github.io/auto-code-reality-check/#s0" title="https://pwdel.github.io/auto-code-reality-check/#s0">#s0</a>
+</div>
+
 <div id="nav">
   <button class="nav-btn" id="btn-prev" onclick="prev()">← PREV</button>
   <div class="dot-nav" id="dot-nav"></div>
@@ -515,6 +537,9 @@ input[type=range].risk-slider::-moz-range-thumb{width:16px;height:16px;border-ra
 <script>
 const TOTAL = 8;
 let current = 0;
+const DEPLOYED_HOME_URL = 'https://pwdel.github.io/';
+const DEPLOYED_PAGE_URL = 'https://pwdel.github.io/auto-code-reality-check/';
+const LOCAL_PAGE_PATH = '/auto-code-reality-check/';
 
 const problems = [
   {cat:"Context & Memory", area:"Context", title:"Context Drift", detail:"Forgets prior constraints in long sessions; repeats bad fixes. LLM performance degrades measurably as the context window passes ~60% full.", icon:"🌀", sev:"high"},
@@ -1053,12 +1078,44 @@ function updateNav(){
   document.getElementById('btn-prev').disabled=current===0;
   document.getElementById('btn-next').disabled=current===TOTAL-1;
   document.getElementById('progress-bar').style.width=`${((current+1)/TOTAL)*100}%`;
+  updateTraceabilityLinks();
 }
 
-function goTo(n){
+function updateTraceabilityLinks(){
+  const slideId=`s${current}`;
+  const homeLink=document.getElementById('trace-home-link');
+  const slideLink=document.getElementById('trace-slide-link');
+  const isLocalPreview=['127.0.0.1','localhost'].includes(window.location.hostname);
+  if(homeLink){
+    homeLink.href=isLocalPreview ? '/' : DEPLOYED_HOME_URL;
+  }
+  if(slideLink){
+    const slideUrl=isLocalPreview
+      ? `${LOCAL_PAGE_PATH}#${slideId}`
+      : `${DEPLOYED_PAGE_URL}#${slideId}`;
+    slideLink.href=slideUrl;
+    slideLink.textContent=`#${slideId}`;
+    slideLink.title=slideUrl;
+  }
+}
+
+function slideFromHash(hash=window.location.hash){
+  const match=hash.match(/^#s(\d+)$/i);
+  if(!match)return null;
+  const index=Number(match[1]);
+  return Number.isInteger(index) && index >= 0 && index < TOTAL ? index : null;
+}
+
+function goTo(n,{syncHash=true}={}){
   document.getElementById('s'+current)?.classList.remove('active');
   current=Math.max(0,Math.min(TOTAL-1,n));
   document.getElementById('s'+current)?.classList.add('active');
+  if(syncHash){
+    const nextHash=`#s${current}`;
+    if(window.location.hash !== nextHash){
+      window.history.replaceState(null,'',nextHash);
+    }
+  }
   updateNav();
   if(current===1){updateBomb();}
   if(current===4){startContextCycle();} else {stopContextCycle();}
@@ -1074,6 +1131,16 @@ document.addEventListener('keydown',e=>{
 });
 
 renderProblems();renderHooks();renderSoft();renderContextPanel();renderBP();buildDots();updateNav();
+const initialSlide=slideFromHash();
+if(initialSlide !== null){
+  goTo(initialSlide,{syncHash:false});
+}
+window.addEventListener('hashchange',()=>{
+  const hashedSlide=slideFromHash();
+  if(hashedSlide !== null && hashedSlide !== current){
+    goTo(hashedSlide,{syncHash:false});
+  }
+});
 sizeCanvas();
 window.addEventListener('resize',()=>{if(current===1)updateBomb();});
 </script>
